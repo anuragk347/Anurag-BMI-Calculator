@@ -1,6 +1,6 @@
 document.querySelector("#imperial").classList.add('add-border');
 
-var metric = true;;
+var metric = true;
 
 switchUnits(true);
 
@@ -16,7 +16,7 @@ document.querySelector("#metric").addEventListener('click', (event) => {
     document.getElementById("welcome").classList.remove("gone");
     document.getElementById("enter-wh-parag").classList.remove("gone");
     document.getElementById("result-2").classList.add("gone");
-})
+});
 
 document.querySelector("#imperial").addEventListener('click', (event) => {
     metric = false;
@@ -30,24 +30,38 @@ document.querySelector("#imperial").addEventListener('click', (event) => {
     document.getElementById("welcome").classList.remove("gone");
     document.getElementById("enter-wh-parag").classList.remove("gone");
     document.getElementById("result-2").classList.add("gone");
-})
-
+});
 
 function switchUnits(metric) {
     document.getElementById("result-3").classList.add("gone");
     if (metric) {
-        document.getElementById("cm-or-inch").innerHTML = "cm"
-        document.getElementById("kg-or-pound").innerHTML = "kg"
+        document.getElementById("cm-or-inch").innerHTML = "cm";
+        document.getElementById("kg-or-pound").innerHTML = "kg";
     } else {
-        document.getElementById("cm-or-inch").innerHTML = "inch"
-        document.getElementById("kg-or-pound").innerHTML = "pound"
+        document.getElementById("cm-or-inch").innerHTML = "inch";
+        document.getElementById("kg-or-pound").innerHTML = "pound";
     }
 }
 
-document.getElementById("weight").addEventListener("keyup", function(event){
-    if (event.code === "Enter") {
+document.getElementById("height").addEventListener("keyup", function (event) {
+    calculateAutomatically();
+});
+
+document.getElementById("weight").addEventListener("keyup", function (event) {
+    calculateAutomatically();
+});
+
+function calculateAutomatically() {
+    let heightVar = document.getElementById("height").value;
+    let weightVar = document.getElementById("weight").value;
+
+    if (heightVar !== "" && weightVar !== "") {
         calculate();
     }
+}
+
+document.getElementById("result").addEventListener('click', (event) => {
+    calculate();
 });
 
 function calculateBMI(weight, height) {
@@ -62,10 +76,6 @@ var calculatedBMI;
 var heightInMetres;
 var message;
 
-document.getElementById("result").addEventListener('click', (event) => {
-    calculate();
-})
-
 function calculate() {
     let heightVar = document.getElementById("height").value;
     let weightVar = document.getElementById("weight").value;
@@ -73,16 +83,15 @@ function calculate() {
     if (heightVar == "" || weightVar == "") {
         document.getElementById("welcome").classList.add("gone");
         document.getElementById("enter-wh-parag").classList.add("gone");
-        document.getElementById("result-3").classList.remove("gone")
+        document.getElementById("result-3").classList.remove("gone");
 
         setTimeout(() => {
             document.getElementById("welcome").classList.remove("gone");
             document.getElementById("enter-wh-parag").classList.remove("gone");
             document.getElementById("result-3").classList.add("gone");
-        }, 3000)
+        }, 3000);
         return;
     }
-
 
     if (!metric) {
         calculatedBMI = calculateImperialBMI(weightVar, heightVar);
@@ -111,25 +120,26 @@ function calculate() {
 
     let underweight = "Your BMI suggests that you are underweight. ";
     let idealWeight = "Your BMI suggests that you are of ideal weight. ";
-    let overvweight = "Your BMI suggests that you are overweight. ";
+    let overweight = "Your BMI suggests that you are overweight. ";
 
     if (!metric) {
         if (calculatedBMI > 18.5 && calculatedBMI < 25) {
-            message = idealWeight + `Your ideal weight is between ${idealWeightMinInLbs.toFixed(2)} - ${idealWeightMaxInLbs.toFixed(2)} lbs.`
+            message = idealWeight + `Your ideal weight is between ${idealWeightMinInLbs.toFixed(2)} - ${idealWeightMaxInLbs.toFixed(2)} lbs.`;
         } else if (calculatedBMI < 18.5) {
-            message = underweight + `Your ideal weight is between ${idealWeightMinInLbs.toFixed(2)} - ${idealWeightMaxInLbs.toFixed(2)} lbs.`
+            message = underweight + `Your ideal weight is between ${idealWeightMinInLbs.toFixed(2)} - ${idealWeightMaxInLbs.toFixed(2)} lbs.`;
         } else {
-            message = overvweight + `Your ideal weight is between ${idealWeightMinInLbs.toFixed(2)} - ${idealWeightMaxInLbs.toFixed(2)} lbs.`
+            message = overweight + `Your ideal weight is between ${idealWeightMinInLbs.toFixed(2)} - ${idealWeightMaxInLbs.toFixed(2)} lbs.`;
         }
     } else {
         if (calculatedBMI > 18.5 && calculatedBMI < 25) {
-            message = idealWeight + `Your ideal weight is between ${idealWeightMinInKgs.toFixed(2)} - ${idealWeightMaxInKgs.toFixed(2)} kg.`
+            message = idealWeight + `Your ideal weight is between ${idealWeightMinInKgs.toFixed(2)} - ${idealWeightMaxInKgs.toFixed(2)} kg.`;
         } else if (calculatedBMI < 18.5) {
-            message = underweight + `Your ideal weight is between ${idealWeightMinInKgs.toFixed(2)} - ${idealWeightMaxInKgs.toFixed(2)} kg.`
+            message = underweight + `Your ideal weight is between ${idealWeightMinInKgs.toFixed(2)} - ${idealWeightMaxInKgs.toFixed(2)} kg.`;
         } else {
-            message = overvweight + `Your ideal weight is between ${idealWeightMinInKgs.toFixed(2)} - ${idealWeightMaxInKgs.toFixed(2)} kg.`
+            message = overweight + `Your ideal weight is between ${idealWeightMinInKgs.toFixed(2)} - ${idealWeightMaxInKgs.toFixed(2)} kg.`;
         }
     }
 
     document.getElementById("ideal-weight").innerHTML = message;
 }
+
